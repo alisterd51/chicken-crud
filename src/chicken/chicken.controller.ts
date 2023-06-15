@@ -69,7 +69,7 @@ export class ChickenController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body() createChickenDto: CreateChickenDto,
   ) {
-    return this.chickenService.update(id, createChickenDto);
+    return this.chickenService.replace(id, createChickenDto);
   }
 
   @Patch(':id')

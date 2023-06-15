@@ -40,13 +40,12 @@ export class ChickenService {
       throw new NotFoundException();
     }
 
-    const newChicken = this.chickenRepository.create({
-      name: createChickenDto.name,
-      birthday: createChickenDto.birthday,
-      weight: createChickenDto.weight,
-      steps: createChickenDto.steps,
-      isRunning: createChickenDto.isRunning,
-    });
+    const newChicken = new Chicken();
+    newChicken.name = createChickenDto.name;
+    newChicken.weight = createChickenDto.weight;
+    newChicken.birthday = createChickenDto.birthday === undefined ? null : createChickenDto.birthday;
+    newChicken.steps = createChickenDto.steps === undefined ? 0 : createChickenDto.steps;
+    newChicken.isRunning = createChickenDto.isRunning === undefined ? false : createChickenDto.isRunning;
 
     return this.chickenRepository.update(
       {

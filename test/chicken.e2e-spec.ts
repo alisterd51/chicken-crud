@@ -236,7 +236,6 @@ describe('ChickenController (e2e)', () => {
   });
 
   describe('/chicken/:id (PUT)', () => {
-    // TODO: update test
     it('replace chicken whith invalid id', () => {
       return request(app.getHttpServer())
         .put('/chicken/42')
@@ -247,10 +246,109 @@ describe('ChickenController (e2e)', () => {
         })
         .expect(404);
     });
+
+    it('replace chicken whith: name, birthday, weight', async () => {
+      await request(app.getHttpServer())
+        .put('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName1",
+          "birthday": "2001-01-01",
+          "weight": 1,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName1");
+      expect(response.body.birthday).toBe("2001-01-01");
+      expect(response.body.weight).toBe(1);
+      expect(response.body.steps).toBe(0);
+      expect(response.body.isRunning).toBe(false);
+
+      return response;
+    });
+
+    it('replace chicken whith: name, weight', async () => {
+      await request(app.getHttpServer())
+        .put('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName2",
+          "weight": 2,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName2");
+      expect(response.body.birthday).toBe(null);
+      expect(response.body.weight).toBe(2);
+      expect(response.body.steps).toBe(0);
+      expect(response.body.isRunning).toBe(false);
+
+      return response;
+    });
+
+    it('replace chicken whith: name', async () => {
+      await request(app.getHttpServer())
+        .put('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName3",
+        })
+        .expect(400);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      return response;
+    });
+
+    it('replace chicken whith: weight', async () => {
+      await request(app.getHttpServer())
+        .put('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "weight": "4",
+        })
+        .expect(400);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      return response;
+    });
+
+    it('replace chicken whith: name, weight, steps, isRunning', async () => {
+      await request(app.getHttpServer())
+        .put('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName5",
+          "birthday": "2005-05-05",
+          "weight": 5,
+          "steps": 5,
+          "isRunning": true,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName5");
+      expect(response.body.birthday).toBe("2005-05-05");
+      expect(response.body.weight).toBe(5);
+      expect(response.body.steps).toBe(5);
+      expect(response.body.isRunning).toBe(true);
+
+      return response;
+    });
   });
 
   describe('/chicken/:id (PATCH)', () => {
-    // TODO: update test
     it('update chicken whith invalid id', () => {
       return request(app.getHttpServer())
         .patch('/chicken/42')
@@ -260,6 +358,130 @@ describe('ChickenController (e2e)', () => {
           "weight": 2,
         })
         .expect(404);
+    });
+
+    it('replace chicken whith: name, birthday, weight', async () => {
+      const prevResponse = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+      await request(app.getHttpServer())
+        .patch('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName6",
+          "birthday": "2006-06-06",
+          "weight": 6,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName6");
+      expect(response.body.birthday).toBe("2006-06-06");
+      expect(response.body.weight).toBe(6);
+      expect(response.body.steps).toBe(prevResponse.body.steps);
+      expect(response.body.isRunning).toBe(prevResponse.body.isRunning);
+
+      return response;
+    });
+
+    it('replace chicken whith: name, weight', async () => {
+      const prevResponse = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+      await request(app.getHttpServer())
+        .patch('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName7",
+          "weight": 7,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName7");
+      expect(response.body.birthday).toBe(prevResponse.body.birthday);
+      expect(response.body.weight).toBe(7);
+      expect(response.body.steps).toBe(prevResponse.body.steps);
+      expect(response.body.isRunning).toBe(prevResponse.body.isRunning);
+
+      return response;
+    });
+
+    it('replace chicken whith: name', async () => {
+      const prevResponse = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+      await request(app.getHttpServer())
+        .patch('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName8",
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName8");
+      expect(response.body.birthday).toBe(prevResponse.body.birthday);
+      expect(response.body.weight).toBe(prevResponse.body.weight);
+      expect(response.body.steps).toBe(prevResponse.body.steps);
+      expect(response.body.isRunning).toBe(prevResponse.body.isRunning);
+
+      return response;
+    });
+
+    it('replace chicken whith: weight', async () => {
+      const prevResponse = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+      await request(app.getHttpServer())
+        .patch('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "weight": 9,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe(prevResponse.body.name);
+      expect(response.body.birthday).toBe(prevResponse.body.birthday);
+      expect(response.body.weight).toBe(9);
+      expect(response.body.steps).toBe(prevResponse.body.steps);
+      expect(response.body.isRunning).toBe(prevResponse.body.isRunning);
+
+      return response;
+    });
+
+    it('replace chicken whith: name, weight, steps, isRunning', async () => {
+      await request(app.getHttpServer())
+        .patch('/chicken/' + testChickenCreate.body.id)
+        .send({
+          "name": "newName10",
+          "birthday": "2010-10-10",
+          "weight": 10,
+          "steps": 10,
+          "isRunning": false,
+        })
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      expect(response.body.name).toBe("newName10");
+      expect(response.body.birthday).toBe("2010-10-10");
+      expect(response.body.weight).toBe(10);
+      expect(response.body.steps).toBe(10);
+      expect(response.body.isRunning).toBe(false);
+
+      return response;
     });
   });
 
@@ -296,15 +518,19 @@ describe('ChickenController (e2e)', () => {
     });
 
     it('run chicken whith valid id', async () => {
-      const prevSteps = +testChickenCreate.body.steps;
+      const prevResponse = await request(app.getHttpServer())
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
+
+      const prevSteps = +prevResponse.body.steps;
 
       await request(app.getHttpServer())
         .get('/chicken/run/' + testChickenCreate.body.id)
         .expect(200);
 
       const response = await request(app.getHttpServer())
-      .get('/chicken/' + testChickenCreate.body.id)
-      .expect(200);
+        .get('/chicken/' + testChickenCreate.body.id)
+        .expect(200);
 
       expect(response.body.isRunning).toBe(true);
       expect(response.body.steps).toBe(prevSteps + 1);
