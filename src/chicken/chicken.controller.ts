@@ -56,4 +56,9 @@ export class ChickenController {
   remove(@Param('id', new ParseIntPipe()) id: number) {
     return this.chickenService.remove(id);
   }
+
+  @Get('run/:id')
+  run(@Param('id', new ParseIntPipe()) id: number) {
+    return this.chickenService.run(id);
+  }
 }

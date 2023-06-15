@@ -245,7 +245,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": 2,
         })
-        .expect(400);
+        .expect(404);
     });
   });
 
@@ -259,7 +259,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": 2,
         })
-        .expect(400);
+        .expect(404);
     });
   });
 
@@ -291,16 +291,20 @@ describe('ChickenController (e2e)', () => {
   describe('/chicken/run/:id (GET)', () => {
     it('run chicken whith invalid id', () => {
       return request(app.getHttpServer())
-        .delete('/chicken/42')
-        .expect(400);
+        .delete('/chicken/run/42')
+        .expect(404);
     });
 
     it('run chicken whith valid id', async () => {
       const prevSteps = +testChickenCreate.body.steps;
 
-      const response = await request(app.getHttpServer())
-        .get('/chicken/' + testChickenCreate.body.id)
+      await request(app.getHttpServer())
+        .get('/chicken/run/' + testChickenCreate.body.id)
         .expect(200);
+
+      const response = await request(app.getHttpServer())
+      .get('/chicken/' + testChickenCreate.body.id)
+      .expect(200);
 
       expect(response.body.isRunning).toBe(true);
       expect(response.body.steps).toBe(prevSteps + 1);
