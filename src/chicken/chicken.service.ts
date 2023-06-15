@@ -13,12 +13,14 @@ export class ChickenService {
   ) { }
 
   async create(createChickenDto: CreateChickenDto): Promise<Chicken> {
-    const user = this.chickenRepository.create({
+    const chicken = this.chickenRepository.create({
       name: createChickenDto.name,
       birthday: createChickenDto.birthday,
       weight: createChickenDto.weight,
+      steps: createChickenDto.steps,
+      isRunning: createChickenDto.isRunning,
     });
-    return this.chickenRepository.save(user);
+    return this.chickenRepository.save(chicken);
   }
 
   findAll(select: FindManyOptions<Chicken>): Promise<Chicken[]> {
@@ -29,7 +31,7 @@ export class ChickenService {
     return this.chickenRepository.findOne(where);
   }
 
-  async replace(id: number, updateChickenDto: UpdateChickenDto) {
+  async replace(id: number, createChickenDto: CreateChickenDto) {
     const chicken = this.findOne({
       where: { id },
     });
@@ -38,12 +40,24 @@ export class ChickenService {
       throw new NotFoundException();
     }
 
+    const newChicken = this.chickenRepository.create({
+      name: createChickenDto.name,
+      birthday: createChickenDto.birthday,
+      weight: createChickenDto.weight,
+      steps: createChickenDto.steps,
+      isRunning: createChickenDto.isRunning,
+    });
+
     return this.chickenRepository.update(
       {
         id,
       },
       {
-        name: updateChickenDto.name,
+        name: newChicken.name,
+        birthday: newChicken.birthday,
+        weight: newChicken.weight,
+        steps: newChicken.steps,
+        isRunning: newChicken.isRunning,
       },
     );
   }
@@ -63,6 +77,10 @@ export class ChickenService {
       },
       {
         name: updateChickenDto.name,
+        birthday: updateChickenDto.birthday,
+        weight: updateChickenDto.weight,
+        steps: updateChickenDto.steps,
+        isRunning: updateChickenDto.isRunning,
       },
     );
   }
