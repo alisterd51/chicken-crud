@@ -13,9 +13,6 @@ export class ChickenService {
   ) {}
 
   async create(createChickenDto: CreateChickenDto): Promise<Chicken> {
-    if (await this.findOne({ where: { name: createChickenDto.name } })) {
-      throw new ForbiddenException();
-    }
     const user = this.chickenRepository.create({
       name: createChickenDto.name,
       birthday: createChickenDto.birthday,

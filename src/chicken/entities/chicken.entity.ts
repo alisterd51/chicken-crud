@@ -17,7 +17,7 @@ export class Chicken {
   })
   name: string;
 
-  @Column()
+  @Column('date', {nullable: true})
   birthday: Date;
 
   @Column()

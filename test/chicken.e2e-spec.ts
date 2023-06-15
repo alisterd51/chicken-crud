@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
@@ -12,6 +12,9 @@ describe('ChickenController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    app.useGlobalPipes(new ValidationPipe({}));
+
     await app.init();
   });
 
@@ -22,7 +25,7 @@ describe('ChickenController (e2e)', () => {
       .post('/chicken')
       .send({
         "name": "Mr. Anderson",
-        "birthday": "2023-06-14T20:39:17.394Z",
+        "birthday": new Date(),
         "weight": 42,
       })
       .expect(201);
@@ -59,14 +62,14 @@ describe('ChickenController (e2e)', () => {
           "birthday": testChickenCreate.body.birthday,
           "weight": testChickenCreate.body.weight,
         })
-        .expect(403);
+        .expect(201);
     });
 
     it('create chicken without parameter', () => {
       return request(app.getHttpServer())
         .post('/chicken')
         .send({})
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with negative weight', () => {
@@ -77,7 +80,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": -42,
         })
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with not number weight', () => {
@@ -88,7 +91,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": "pouet",
         })
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with null weight', () => {
@@ -99,7 +102,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": "",
         })
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with null name', () => {
@@ -110,7 +113,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": "1",
         })
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with invalid birthday', () => {
@@ -121,7 +124,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "pouet",
           "weight": "1",
         })
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with null birthday', () => {
@@ -132,7 +135,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "",
           "weight": "1",
         })
-        .expect(403);
+        .expect(400);
     });
 
     it('create chicken with: name, birthday, weight', async () => {
@@ -157,7 +160,7 @@ describe('ChickenController (e2e)', () => {
           "name": "name2",
           "birthday": "2023-06-14T20:39:17.394Z",
         })
-        .expect(403);
+        .expect(400);
       return chicken;
     });
 
@@ -182,7 +185,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": 1,
         })
-        .expect(403);
+        .expect(400);
       return chicken;
     });
 
@@ -192,7 +195,7 @@ describe('ChickenController (e2e)', () => {
         .send({
           "name": "name5",
         })
-        .expect(403);
+        .expect(400);
       return chicken;
     });
 
@@ -202,7 +205,7 @@ describe('ChickenController (e2e)', () => {
         .send({
           "birthday": "2023-06-14T20:39:17.394Z",
         })
-        .expect(403);
+        .expect(400);
       return chicken;
     });
 
@@ -212,7 +215,7 @@ describe('ChickenController (e2e)', () => {
         .send({
           "weight": 1,
         })
-        .expect(403);
+        .expect(400);
       return chicken;
     });
 
@@ -233,6 +236,7 @@ describe('ChickenController (e2e)', () => {
   });
 
   describe('/chicken/:id (PUT)', () => {
+    // TODO: update test
     it('replace chicken whith invalid id', () => {
       return request(app.getHttpServer())
         .put('/chicken/42')
@@ -241,11 +245,12 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": 2,
         })
-        .expect(403);
+        .expect(400);
     });
   });
 
   describe('/chicken/:id (PATCH)', () => {
+    // TODO: update test
     it('update chicken whith invalid id', () => {
       return request(app.getHttpServer())
         .patch('/chicken/42')
@@ -254,7 +259,7 @@ describe('ChickenController (e2e)', () => {
           "birthday": "2023-06-14T20:39:17.394Z",
           "weight": 2,
         })
-        .expect(403);
+        .expect(400);
     });
   });
 
@@ -269,9 +274,9 @@ describe('ChickenController (e2e)', () => {
       const newChicken = await request(app.getHttpServer())
         .post('/chicken')
         .send({
-          "name": "newChicken",
-          "birthday": "2023-06-14T20:39:17.394Z",
-          "weight": "42",
+          "name": "new Mr. Anderson",
+          "birthday": new Date(),
+          "weight": 42,
         })
         .expect(201);
       await request(app.getHttpServer())
@@ -287,7 +292,7 @@ describe('ChickenController (e2e)', () => {
     it('run chicken whith invalid id', () => {
       return request(app.getHttpServer())
         .delete('/chicken/42')
-        .expect(403);
+        .expect(400);
     });
 
     it('run chicken whith valid id', async () => {

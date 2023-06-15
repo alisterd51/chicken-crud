@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsDate, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsNumber, IsDate, IsBoolean, IsDateString, IsPositive, min, Min } from 'class-validator';
 
 
 export class CreateChickenDto {
@@ -12,23 +12,24 @@ export class CreateChickenDto {
   readonly name: string;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   @ApiProperty({
     description: 'birthday',
   })
   readonly birthday: Date;
 
   @IsNumber()
+  @Min(0)
   @ApiProperty({
     description: 'weight',
   })
-  weight: number;
+  readonly weight: number;
 
   @IsOptional()
   @IsNumber()
-  steps: number;
+  readonly steps: number;
 
   @IsOptional()
   @IsBoolean()
-  isRunning: boolean;
+  readonly isRunning: boolean;
 }

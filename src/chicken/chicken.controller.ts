@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseIntPipe, NotFoundException, HttpStatus, HttpException } from '@nestjs/common';
 import { ChickenService } from './chicken.service';
 import { CreateChickenDto } from './dto/create-chicken.dto';
 import { UpdateChickenDto } from './dto/update-chicken.dto';
@@ -25,11 +25,15 @@ export class ChickenController {
   }
 
   @Get(':id')
-  findOne(@Param('id', new ParseIntPipe()) id: number) {
-    return this.chickenService.findOne({
+  async findOne(@Param('id', new ParseIntPipe()) id: number) {
+    const chicken = this.chickenService.findOne({
       where: { id },
       select: { id: true, name: true, birthday: true, weight: true, steps: true, isRunning: true },
     });
+    if (await chicken === null) {
+      throw new NotFoundException();
+    }
+    return chicken;
   }
 
   @Put(':id')
