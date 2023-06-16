@@ -5,6 +5,8 @@ import { ChickenModule } from './chicken/chicken.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Chicken } from './chicken/entities/chicken.entity';
 import { DataSource } from 'typeorm';
+import { CoopModule } from './coop/coop.module';
+import { Coop } from './coop/entities/coop.entity';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import { DataSource } from 'typeorm';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [Chicken],
+      entities: [Chicken, Coop],
       synchronize: true,
     }),
     ChickenModule,
+    CoopModule,
   ],
   controllers: [AppController],
   providers: [AppService],

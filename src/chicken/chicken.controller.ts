@@ -32,7 +32,7 @@ export class ChickenController {
   })
   findAll() {
     return this.chickenService.findAll({
-      select: { id: true, name: true, birthday: true, weight: true, steps: true, isRunning: true },
+      relations: ['coop'],
     });
   }
 
@@ -48,7 +48,7 @@ export class ChickenController {
   async findOne(@Param('id', new ParseIntPipe()) id: number) {
     const chicken = this.chickenService.findOne({
       where: { id },
-      select: { id: true, name: true, birthday: true, weight: true, steps: true, isRunning: true },
+      relations: ['coop'],
     });
     if (await chicken === null) {
       throw new NotFoundException();

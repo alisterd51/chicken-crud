@@ -1,24 +1,31 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChickenDto } from './dto/create-chicken.dto';
 import { UpdateChickenDto } from './dto/update-chicken.dto';
 import { Chicken } from './entities/chicken.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { CoopService } from 'src/coop/coop.service';
 
 @Injectable()
 export class ChickenService {
   constructor(
     @InjectRepository(Chicken)
     private chickenRepository: Repository<Chicken>,
+    private coopService: CoopService,
   ) { }
 
   async create(createChickenDto: CreateChickenDto): Promise<Chicken> {
+    const coop = createChickenDto.coopName ? await this.coopService.findOne({
+      where: { name: createChickenDto.coopName },
+    }) : null;
+
     const chicken = this.chickenRepository.create({
       name: createChickenDto.name,
       birthday: createChickenDto.birthday,
       weight: createChickenDto.weight,
       steps: createChickenDto.steps,
       isRunning: createChickenDto.isRunning,
+      coop: coop,
     });
     return this.chickenRepository.save(chicken);
   }

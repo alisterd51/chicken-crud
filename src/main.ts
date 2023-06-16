@@ -12,6 +12,7 @@ async function bootstrap() {
     .setDescription('The Chicken API description')
     .setVersion('1.0')
     .addTag('chicken')
+    .addTag('coop')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

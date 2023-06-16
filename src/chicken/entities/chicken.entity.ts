@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Coop } from 'src/coop/entities/coop.entity';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Chicken {
@@ -44,4 +45,7 @@ export class Chicken {
     description: 'is running',
   })
   isRunning: boolean;
+
+  @ManyToOne(() => Coop, (coop) => coop.chickens)
+  coop: Coop;
 }

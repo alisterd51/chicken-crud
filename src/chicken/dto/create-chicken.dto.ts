@@ -42,4 +42,11 @@ export class CreateChickenDto {
     description: 'optional is running',
   })
   readonly isRunning: boolean;
+
+  @IsOptional()
+  @ApiPropertyOptional({
+    example: 'Cluckingham Palace.',
+    description: 'optional coop name',
+  })
+  readonly coopName: string;
 }
