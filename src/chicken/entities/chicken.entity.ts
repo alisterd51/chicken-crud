@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Coop } from 'src/coop/entities/coop.entity';
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Coop } from '../../coop/entities/coop.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Chicken {

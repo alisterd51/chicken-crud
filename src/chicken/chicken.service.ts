@@ -4,7 +4,7 @@ import { UpdateChickenDto } from './dto/update-chicken.dto';
 import { Chicken } from './entities/chicken.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { CoopService } from 'src/coop/coop.service';
+import { CoopService } from '../coop/coop.service';
 
 @Injectable()
 export class ChickenService {

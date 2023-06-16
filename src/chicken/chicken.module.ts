@@ -3,7 +3,7 @@ import { ChickenService } from './chicken.service';
 import { ChickenController } from './chicken.controller';
 import { Chicken } from './entities/chicken.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoopModule } from 'src/coop/coop.module';
+import { CoopModule } from '../coop/coop.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Chicken]), CoopModule],

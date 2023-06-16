@@ -1,4 +1,4 @@
-import { Chicken } from "src/chicken/entities/chicken.entity";
+import { Chicken } from "../../chicken/entities/chicken.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
