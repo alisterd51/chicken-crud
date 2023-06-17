@@ -35,7 +35,7 @@ Pour la base de données, j'utilise un conteneur [postgres 15](https://hub.docke
 
 Les tests de end to end sont écrits avec [jest](https://docs.nestjs.com/fundamentals/testing).
 
-La documentation est générée avec [swagger](https://docs.nestjs.com/openapi/introduction).
+La documentation est générée avec [swagger](https://docs.nestjs.com/openapi/introduction) et est accesible a l'addresse <http://localhost:3000/api>.
 
 ## Utiliser avec node (testé avec les versions 16.x, 18.x, 20.x)
 
@@ -61,6 +61,9 @@ docker run --detach \
 
 # optional: run e2e tests
 npm run test:e2e
+
+# run project
+npm run start
 
 # test chicken-crud
 open http://localhost:3000/api
