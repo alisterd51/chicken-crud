@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, NotFoundException } from '@nestjs/common';
 import { CoopService } from './coop.service';
 import { CreateCoopDto } from './dto/create-coop.dto';
 import { UpdateCoopDto } from './dto/update-coop.dto';
@@ -7,7 +7,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller('coop')
 @ApiTags('coop')
 export class CoopController {
-  constructor(private readonly coopService: CoopService) {}
+  constructor(private readonly coopService: CoopService) { }
 
   @Post()
   @ApiOperation({ summary: 'Create coop' })
@@ -26,16 +26,26 @@ export class CoopController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get one coop by id' })
-  findOne(@Param('id', new ParseIntPipe()) id: number) {
-    return this.coopService.findOne({
+  async findOne(@Param('id', new ParseIntPipe()) id: number) {
+    const coop = await this.coopService.findOne({
       where: { id },
       relations: ['chickens'],
     });
+    if (coop === null) {
+      throw new NotFoundException();
+    }
+    return coop;
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update one coop by id' })
-  update(@Param('id', new ParseIntPipe()) id: number, @Body() updateCoopDto: UpdateCoopDto) {
+  async update(@Param('id', new ParseIntPipe()) id: number, @Body() updateCoopDto: UpdateCoopDto) {
+    const coop = await this.coopService.findOne({
+      where: { id },
+    });
+    if (coop === null) {
+      throw new NotFoundException();
+    }
     return this.coopService.update(id, updateCoopDto);
   }
 
