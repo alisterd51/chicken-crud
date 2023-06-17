@@ -1,73 +1,80 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Chicken-CRUD
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descrition
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Ce repo est une reponse a un test technique dont voici le sujet:
 
-## Description
+L’objectif de ce challenge est de créer une API en Javascript (NodeJS)
+Le webservice /chicken sera un CRUD avec les méthodes suivantes : GET /
+POST / PUT / PATCH / DELETE
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+L’objet chicken est tel que :
+name: String (required),
+birthday: Date,
+weight: Number (required),
+steps: Number (default 0),
+isRunning: Boolean (default false) Puis le webservice /chicken/run
+augmentera la variable steps de 1.
 
-## Installation
+Libre à toi d’utiliser la base de données et les frameworks de ton
+choix.
 
-```bash
-$ npm install
-```
+Une documentation détaillée serait un plus !
 
-## Running the app
+BONUS : Ajouter un lien de chicken vers un autre objet comme farmyard ou
+coop.
 
-```bash
-# development
-$ npm run start
+Livrable : Gitlab ou Github.
 
-# watch mode
-$ npm run start:dev
+## Choix des technologies
 
-# production mode
-$ npm run start:prod
-```
+J'ai fait le choix d'utiliser le framework [nestjs](https://nestjs.com/) qui utilise par defaut du TypeScript.
+Le TypeScript est un sur-ensemble de JavaScript qui sera transpillé en JavaScript au moment du build.
 
-## Test
+Pour la base de données, j'utilise un conteneur [postgres 15](https://hub.docker.com/_/postgres).
+
+Les tests de end to end sont écrits avec [jest](https://docs.nestjs.com/fundamentals/testing).
+
+La documentation est générée avec [swagger](https://docs.nestjs.com/openapi/introduction).
+
+## Utiliser avec node (testé avec les versions 16.x, 18.x, 20.x)
 
 ```bash
-# unit tests
-$ npm run test
+# in a production environment you need to modify these variables
+cp sample.env .env
 
-# e2e tests
-$ npm run test:e2e
+# export of the .env file in the environment of the machine 
+export $(grep -v '^#' .env | xargs)
 
-# test coverage
-$ npm run test:cov
+# clean install a project
+npm ci
+
+# run postgres container
+docker run --detach \
+           --name postgres \
+           --env POSTGRES_USER \
+           --env POSTGRES_PASSWORD \
+           --env POSTGRES_DB \
+           --publish 5432:5432 \
+           --volume ./data:/var/lib/postgresql/data \
+           postgres:15
+
+# optional: run e2e tests
+npm run test:e2e
+
+# test chicken-crud
+open http://localhost:3000/api
 ```
 
-## Support
+## Utiliser avec docker compose
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# in a production environment you need to modify these variables
+cp sample.env .env
 
-## Stay in touch
+# run chicken-crud and postgres in docker compose
+docker compose up -d
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+# test chicken-crud
+open http://localhost:3000/api
+```
