@@ -126,7 +126,7 @@ describe('CoopController (e2e)', () => {
     it('delete one coop with invalid id', () => {
       return request(app.getHttpServer())
         .delete('/coop/42')
-        .expect(200);
+        .expect(404);
     });
   });
 
