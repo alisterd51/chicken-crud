@@ -65,13 +65,18 @@ export class CoopController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete one coop by id' })
   @ApiOkResponse({ description: 'coop deleted' })
+  @ApiBadRequestResponse({ description: 'coop not empty' })
   @ApiNotFoundResponse({ description: 'coop id not found' })
   async remove(@Param('id', new ParseIntPipe()) id: number) {
     const coop = await this.coopService.findOne({
       where: { id },
+      relations: ['chickens'],
     });
     if (coop === null) {
       throw new NotFoundException();
+    }
+    if (coop.chickens.length > 0) {
+      throw new BadRequestException();
     }
     return this.coopService.remove(id);
   }

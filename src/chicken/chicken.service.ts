@@ -53,18 +53,15 @@ export class ChickenService {
     newChicken.birthday = createChickenDto.birthday === undefined ? null : createChickenDto.birthday;
     newChicken.steps = createChickenDto.steps === undefined ? 0 : createChickenDto.steps;
     newChicken.isRunning = createChickenDto.isRunning === undefined ? false : createChickenDto.isRunning;
+    newChicken.coop = createChickenDto.coopName ? await this.coopService.findOne({
+      where: { name: createChickenDto.coopName },
+    }) : null;
 
     return this.chickenRepository.update(
       {
         id,
       },
-      {
-        name: newChicken.name,
-        birthday: newChicken.birthday,
-        weight: newChicken.weight,
-        steps: newChicken.steps,
-        isRunning: newChicken.isRunning,
-      },
+      newChicken,
     );
   }
 
@@ -72,6 +69,9 @@ export class ChickenService {
     const chicken = this.findOne({
       where: { id },
     });
+    const coop = updateChickenDto.coopName ? await this.coopService.findOne({
+      where: { name: updateChickenDto.coopName },
+    }) : undefined;
 
     if (await chicken === null) {
       throw new NotFoundException();
@@ -87,6 +87,7 @@ export class ChickenService {
         weight: updateChickenDto.weight,
         steps: updateChickenDto.steps,
         isRunning: updateChickenDto.isRunning,
+        coop: coop,
       },
     );
   }
